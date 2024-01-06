@@ -94,25 +94,30 @@ def user_register():
 
         username = st.text_input("Username")
         password = st.text_input("Password", type='password')
+        password2 = st.text_input("Confirm Password", type='password')
 
         submit_button = st.form_submit_button(label='Register')
 
         if submit_button and username != "" and password != "":
-            try:
-                xata.get("Users",username)
-                st.error("User already exists")
-            except Exception as e:
-                if e.status_code == 404:
-                    pass
-            try:
-                result = xata.insert("Users",{"username":username,
-                "password":bcrypt.hashpw(password.strip().encode(), bcrypt.gensalt()).decode()},
-                record_id=username,if_version=0)
-                st.toast("User created",icon="😄")
-                st.write(result)
-            except Exception as e:
-                    st.error("Something went wrong")
-                    st.write(e)
+            if password == password2:
+                try:
+                    xata.get("Users",username)
+                    st.error("User already exists")
+                except Exception as e:
+                    if e.status_code == 404:
+                        pass
+                try:
+                    result = xata.insert("Users",{"username":username,
+                    "password":bcrypt.hashpw(password.strip().encode(), bcrypt.gensalt()).decode()},
+                    record_id=username,if_version=0)
+                    st.toast("User created",icon="😄")
+                    st.write(result)
+                except Exception as e:
+                        st.error("Something went wrong")
+                        st.write(e)
+            else:
+                st.error("Passwords do not match")
+
 
 def chat_room(loged: bool = False):
 
