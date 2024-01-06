@@ -9,7 +9,7 @@ This repository showcases the synergy of Xata and Streamlit, powered by the `st-
 
 - **Effortless Integration:** Explore the fluid integration of Xata and Streamlit, showcasing the ease of building complex web applications with minimal code.
 
-- **ST-XataDB-Connection:** Leverage the capabilities of the ST-XataDB-Connection package to streamline database connectivity, enhancing the application's efficiency.
+- **`st-xatadb-connection`:** Leverage the capabilities of the `st-xatadb-connection` package to streamline database connectivity, enhancing the application's efficiency.
 
 - **bcrypt Encryption:** Prioritize user security with the bcrypt module, offering robust encryption for user credentials, safeguarding sensitive information.
 
