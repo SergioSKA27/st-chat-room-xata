@@ -1,20 +1,33 @@
 import streamlit as st
 from st_xatadb_connection import XataConnection
 import bcrypt
+
+st.set_page_config(page_title="Xata Demo",page_icon="🦋",layout="wide")
+# Set the connection to the database
 xata = st.connection('xata', type=XataConnection)
 
+# Set the title of the app
+st.title("Xata Demo")
+st.subheader("Chat Room with Xata and Streamlit")
+
+# Set the variables for the app
 if 'login_status' not in st.session_state:
+    #we can use this to check if the user is logged in or not
     st.session_state.login_status = False
 
 if 'username' not in st.session_state:
+    #we can use this to check the username of the user
     st.session_state.username = None
 
 if 'view' not in st.session_state:
     st.session_state.view = None
 
 if 'chat' not in st.session_state or st.session_state.chat is None:
+    #this stores the chat
     try:
-        st.session_state.chat = xata.query("comments",{"page": {"size": 10}})
+        st.session_state.chat = xata.query("comments",{"page": {"size": 10},
+        "sort": {"xata.createdAt": "desc"}
+        })
     except Exception as e:
         st.error(e)
         st.session_state.chat = []
@@ -24,7 +37,9 @@ if 'chatmessage' not in st.session_state:
 
 def update_chat():
     try:
-        st.session_state.chat = xata.query("comments")['records']
+        st.session_state.chat = xata.query("comments",{"page": {"size": 10},
+        "sort": {"xata.createdAt": "desc"}
+        })
     except Exception as e:
         st.session_state.chat = []
 
@@ -99,7 +114,7 @@ def user_register():
 def chat_room(loged: bool = False):
 
     def read_chat():
-        for i in st.session_state.chat['records']:
+        for i in st.session_state.chat['records'][::-1]:
             with st.chat_message("user",avatar="🦋"):
                 st.write(":blue[user] : " + i['user']['id'])
                 st.write(i['comment'])
@@ -129,6 +144,10 @@ def chat_room(loged: bool = False):
 def app():
     if st.session_state.login_status:
         st.title("Welcome")
+        if st.button("Logout"):
+            st.session_state.login_status = False
+            st.session_state.username = None
+            st.rerun()
     else:
         if st.session_state.view is None:
             st.session_state.view = "login"
@@ -143,5 +162,6 @@ def app():
                 st.session_state.view = "login"
                 st.rerun()
     chat_room(st.session_state.login_status)
+
 if __name__ == "__main__":
     app()
