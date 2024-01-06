@@ -9,6 +9,7 @@ xata = st.connection('xata', type=XataConnection)
 # Set the title of the app
 st.title("Xata Demo")
 st.subheader("Chat Room with Xata and Streamlit")
+st.caption("Made with ❤️ by Sergio Lopez Martinez")
 st.divider()
 # Set the variables for the app
 if 'login_status' not in st.session_state:
@@ -117,6 +118,7 @@ def user_register():
                             st.write(e)
             else:
                 st.error("Passwords do not match")
+    st.caption("This is a demo app so please do not use real passwords.")
 
 
 def chat_room(loged: bool = False):
@@ -131,13 +133,13 @@ def chat_room(loged: bool = False):
     st.title("Chat Room")
     read_chat()
     cols = st.columns([0.2,0.3,0.3,0.2])
-    if cols[1].button("Previous"):
+    if cols[1].button("Previous Page"):
         st.session_state.chat = xata.prev_page("comments",st.session_state.chat,pagesize=10)
         st.rerun()
-    if cols[2].button("Next"):
+    if cols[2].button("Next Page"):
         st.session_state.chat = xata.next_page("comments",st.session_state.chat,pagesize=10)
         st.rerun()
-    if cols[3].button("Refresh"):
+    if cols[3].button("Refresh Chat"):
         update_chat()
         st.rerun()
 
@@ -170,6 +172,9 @@ def app():
                 st.session_state.view = "login"
                 st.rerun()
     chat_room(st.session_state.login_status)
+    st.caption("Do not share any personal information in this chat room, be nice to each other and have fun!")
+    st.caption("To see new messages you need to press the refresh chat button.")
+
 
 if __name__ == "__main__":
     app()
