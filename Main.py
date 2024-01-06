@@ -9,7 +9,7 @@ xata = st.connection('xata', type=XataConnection)
 # Set the title of the app
 st.title("Xata Demo")
 st.subheader("Chat Room with Xata and Streamlit")
-
+st.divider()
 # Set the variables for the app
 if 'login_status' not in st.session_state:
     #we can use this to check if the user is logged in or not
@@ -36,6 +36,7 @@ if 'chatmessage' not in st.session_state:
     st.session_state.chatmessage = None
 
 def update_chat():
+    #this updates the chat to get the latest messages
     try:
         st.session_state.chat = xata.query("comments",{"page": {"size": 10},
         "sort": {"xata.createdAt": "desc"}
@@ -44,6 +45,7 @@ def update_chat():
         st.session_state.chat = []
 
 def add_comment():
+    #this adds the comment to the database
     if st.session_state.chatmessage is not None and st.session_state.chatmessage != "":
         try:
             xata.insert("comments",{"user":st.session_state.username,"comment":st.session_state.chatmessage})
@@ -54,7 +56,7 @@ def add_comment():
 
 def login():
     st.title("Login")
-
+    #this is the login form
     with st.form(key='login_form'):
 
         username = st.text_input("Username")
@@ -68,6 +70,7 @@ def login():
                 user_info = xata.get("Users",username)
             except Exception as e:
                 if e.status_code == 404:
+                    #this means that the user does not exist
                     st.error("No users found")
 
         if submit_button:
@@ -134,7 +137,7 @@ def chat_room(loged: bool = False):
         st.rerun()
 
 
-    chat_input = st.chat_input("Type here",key="chat_input",max_chars=100,disabled=not loged)
+    chat_input = st.chat_input("Type here",key="chat_input",max_chars=250,disabled=not loged)
     if chat_input:
         st.session_state.chatmessage = chat_input
         add_comment()
