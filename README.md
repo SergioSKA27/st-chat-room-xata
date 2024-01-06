@@ -1,7 +1,7 @@
 
 # Xata-Streamlit Chat App
 
-[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://demo-chat-room-xata.streamlit.app/) | [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/) | [![GitHub stars](https://img.shields.io/github/stars/Naereen/StrapDown.js.svg?style=social&label=Star&maxAge=2592000)](https://github.com/SergioSKA27/st-chat-room-xata)
+[![Streamlit App](https://static.streamlit.io/badges/streamlit_badge_black_white.svg)](https://demo-chat-room-xata.streamlit.app/) | [![made-with-python](https://img.shields.io/badge/Made%20with-Python-1f425f.svg)](https://www.python.org/)
 
 Welcome to the Xata-Streamlit Chat App repository! This project highlights the dynamic collaboration of Xata and Streamlit, enhanced by the [`st-xatadb-connection`](https://github.com/SergioSKA27/st-xatadb-connection) package and fortified with the bcrypt module for top-notch encryption.
 
