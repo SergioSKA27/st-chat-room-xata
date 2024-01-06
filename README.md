@@ -1,7 +1,7 @@
 
 # Xata-Streamlit Chat App
 
-Welcome to the Xata-Streamlit Chat App repository! This project highlights the dynamic collaboration of Xata and Streamlit, enhanced by the ST-XataDB-Connection package and fortified with the bcrypt module for top-notch encryption.
+Welcome to the Xata-Streamlit Chat App repository! This project highlights the dynamic collaboration of Xata and Streamlit, enhanced by the `st-xatadb-connection` package and fortified with the bcrypt module for top-notch encryption.
 
 This repository showcases the synergy of Xata and Streamlit, powered by the `st-xatadb-connection` package. With robust encryption from the bcrypt module, this demo app effortlessly creates a secure chat room web application in under 150 lines. Explore the seamless integration of user-friendly features, including efficient login and registration functionalities.
 
