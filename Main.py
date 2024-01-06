@@ -62,7 +62,7 @@ def login():
         username = st.text_input("Username")
         password = st.text_input("Password", type='password')
         submit_button = st.form_submit_button(label='Login')
-        
+
 
         if username != "" and password != "":
             user_info = None
@@ -106,16 +106,15 @@ def user_register():
                     st.error("User already exists")
                 except Exception as e:
                     if e.status_code == 404:
-                        pass
-                try:
-                    result = xata.insert("Users",{"username":username.strip(),
-                    "password":bcrypt.hashpw(password.strip().encode(), bcrypt.gensalt()).decode()},
-                    record_id=username.strip(),if_version=0)
-                    st.toast("User created",icon="😄")
-                    st.write(result)
-                except Exception as e:
-                        st.error("Something went wrong")
-                        st.write(e)
+                        try:
+                            result = xata.insert("Users",{"username":username.strip(),
+                            "password":bcrypt.hashpw(password.strip().encode(), bcrypt.gensalt()).decode()},
+                            record_id=username.strip(),if_version=0)
+                            st.toast("User created",icon="😄")
+                            st.write(result)
+                        except Exception as e:
+                            st.error("Something went wrong")
+                            st.write(e)
             else:
                 st.error("Passwords do not match")
 
