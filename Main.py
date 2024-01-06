@@ -99,6 +99,9 @@ def user_register():
         submit_button = st.form_submit_button(label='Register')
 
         if submit_button and username != "" and password != "":
+            username = username.strip()
+            password = password.strip()
+            password2 = password2.strip()
             if password == password2:
                 try:
                     xata.get("Users",username)
