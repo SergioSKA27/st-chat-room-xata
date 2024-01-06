@@ -62,12 +62,13 @@ def login():
         username = st.text_input("Username")
         password = st.text_input("Password", type='password')
         submit_button = st.form_submit_button(label='Login')
+        
 
         if username != "" and password != "":
             user_info = None
 
             try:
-                user_info = xata.get("Users",username)
+                user_info = xata.get("Users",username.strip())
             except Exception as e:
                 if e.status_code == 404:
                     #this means that the user does not exist
@@ -78,9 +79,9 @@ def login():
             if user_info is not None:
 
                 if bcrypt.checkpw(password.strip().encode(), user_info['password'].encode()):
-                    st.toast("Logged in as {}".format(username),icon="😄")
+                    st.toast("Logged in as {}".format(username.strip()),icon="😄")
                     st.session_state.login_status = True
-                    st.session_state.username = username
+                    st.session_state.username = username.strip()
                     st.rerun()
 
                 else:
@@ -99,20 +100,17 @@ def user_register():
         submit_button = st.form_submit_button(label='Register')
 
         if submit_button and username != "" and password != "":
-            username = username.strip()
-            password = password.strip()
-            password2 = password2.strip()
-            if password == password2:
+            if password.strip() == password2.strip():
                 try:
-                    xata.get("Users",username)
+                    xata.get("Users",username.strip())
                     st.error("User already exists")
                 except Exception as e:
                     if e.status_code == 404:
                         pass
                 try:
-                    result = xata.insert("Users",{"username":username,
+                    result = xata.insert("Users",{"username":username.strip(),
                     "password":bcrypt.hashpw(password.strip().encode(), bcrypt.gensalt()).decode()},
-                    record_id=username,if_version=0)
+                    record_id=username.strip(),if_version=0)
                     st.toast("User created",icon="😄")
                     st.write(result)
                 except Exception as e:
