@@ -62,7 +62,7 @@ def login():
 
         username = st.text_input("Username")
         password = st.text_input("Password", type='password')
-        submit_button = st.form_submit_button(label='Login')
+        submit_button = st.form_submit_button(label='Login',disabled=True)
 
 
         if username != "" and password != "":
@@ -98,7 +98,7 @@ def user_register():
         password = st.text_input("Password", type='password')
         password2 = st.text_input("Confirm Password", type='password')
 
-        submit_button = st.form_submit_button(label='Register')
+        submit_button = st.form_submit_button(label='Register',disabled=True)
 
         if submit_button and username != "" and password != "":
             if password.strip() == password2.strip():
