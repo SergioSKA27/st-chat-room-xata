@@ -20,15 +20,15 @@ if 'username' not in st.session_state:
     #we can use this to check the username of the user
     st.session_state.username = None
 
-if 'view' not in st.session_state:
-    st.session_state.view = None
+if 'page' not in st.session_state:
+    st.session_state.page = 0
 
 if 'chat' not in st.session_state or st.session_state.chat is None:
     #this stores the chat
     try:
-        st.session_state.chat = xata.query("comments",{"page": {"size": 10},
+        st.session_state.chat = [xata.query("comments",{"page": {"size": 10},
         "sort": {"xata.createdAt": "desc"}
-        })
+        })]
     except Exception as e:
         st.error(e)
         st.session_state.chat = []
@@ -39,9 +39,9 @@ if 'chatmessage' not in st.session_state:
 def update_chat():
     #this updates the chat to get the latest messages
     try:
-        st.session_state.chat = xata.query("comments",{"page": {"size": 10},
+        st.session_state.chat = [xata.query("comments",{"page": {"size": 10},
         "sort": {"xata.createdAt": "desc"}
-        })
+        })]
     except Exception as e:
         st.session_state.chat = []
 
@@ -124,7 +124,7 @@ def user_register():
 def chat_room(loged: bool = False):
 
     def read_chat():
-        for i in st.session_state.chat['records'][::-1]:
+        for i in st.session_state.chat[st.session_state.page]['records'][::-1]:
             with st.chat_message("user",avatar="🦋"):
                 st.write(":blue[user] : " + i['user']['id'])
                 st.write(i['comment'])
@@ -134,15 +134,19 @@ def chat_room(loged: bool = False):
     read_chat()
     cols = st.columns([0.2,0.3,0.3,0.2])
     if cols[1].button("Previous Page"):
-        st.session_state.chat = xata.prev_page("comments",st.session_state.chat,pagesize=10)
+        if st.session_state.page > 0:
+            st.session_state.page -= 1
         st.rerun()
     if cols[2].button("Next Page"):
-        st.session_state.chat = xata.next_page("comments",st.session_state.chat,pagesize=10)
+        st.session_state.chat.append(xata.next_page("comments",st.session_state.chat,pagesize=10))
+        st.session_state.page += 1
+        if st.session_state.chat[-1] is None:
+            del st.session_state.chat[-1]
+            st.session_state.page -= 1
         st.rerun()
     if cols[3].button("Refresh Chat"):
         update_chat()
         st.rerun()
-
 
     chat_input = st.chat_input("Type here",key="chat_input",max_chars=250,disabled=not loged)
     if chat_input:
@@ -159,7 +163,7 @@ def app():
             st.session_state.username = None
             st.rerun()
     else:
-        if st.session_state.view is None:
+        if "view" not in st.session_state or st.session_state.view is None:
             st.session_state.view = "login"
         if st.session_state.view == "login":
             login()
@@ -172,8 +176,7 @@ def app():
                 st.session_state.view = "login"
                 st.rerun()
     chat_room(st.session_state.login_status)
-    st.caption("Do not share any personal information in this chat room, be nice to each other and have fun!")
-    st.caption("To see new messages you need to press the refresh chat button.")
+
 
 
 if __name__ == "__main__":
