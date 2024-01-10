@@ -26,7 +26,7 @@ if 'page' not in st.session_state:
 if 'chat' not in st.session_state or st.session_state.chat is None:
     #this stores the chat
     try:
-        st.session_state.chat = [xata.query("comments",{"page": {"size": 10},
+        st.session_state.chat = [xata.query("comments",{"page": {"size": 2},
         "sort": {"xata.createdAt": "desc"}
         })]
     except Exception as e:
@@ -39,7 +39,7 @@ if 'chatmessage' not in st.session_state:
 def update_chat():
     #this updates the chat to get the latest messages
     try:
-        st.session_state.chat = [xata.query("comments",{"page": {"size": 10},
+        st.session_state.chat = [xata.query("comments",{"page": {"size": 2},
         "sort": {"xata.createdAt": "desc"}
         })]
     except Exception as e:
@@ -132,19 +132,19 @@ def chat_room(loged: bool = False):
 
     st.title("Chat Room")
     read_chat()
-    cols = st.columns([0.2,0.3,0.3,0.2])
-    if cols[1].button("Previous Page"):
+    cols = st.columns([0.5,0.2,0.2,0.1])
+    if cols[1].button("⏮️",use_container_width=True,key="back"):
         if st.session_state.page > 0:
             st.session_state.page -= 1
         st.rerun()
-    if cols[2].button("Next Page"):
-        st.session_state.chat.append(xata.next_page("comments",st.session_state.chat,pagesize=10))
+    if cols[2].button("⏭️",use_container_width=True,key="next"):
+        st.session_state.chat.append(xata.next_page("comments",st.session_state.chat,pagesize=2))
         st.session_state.page += 1
         if st.session_state.chat[-1] is None:
             del st.session_state.chat[-1]
             st.session_state.page -= 1
         st.rerun()
-    if cols[3].button("Refresh Chat"):
+    if cols[3].button("🔃",use_container_width=True,key='refresh'):
         update_chat()
         st.rerun()
 
