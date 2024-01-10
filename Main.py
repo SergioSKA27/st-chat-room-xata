@@ -27,7 +27,7 @@ if 'chat' not in st.session_state or st.session_state.chat is None:
     #this stores the chat
     try:
         st.session_state.chat = [xata.query("comments",{"page": {"size": 2},
-        "sort": {"xata.createdAt": "asc"}
+        "sort": {"xata.createdAt": "desc"}
         })]
     except Exception as e:
         st.error(e)
@@ -40,7 +40,7 @@ def update_chat():
     #this updates the chat to get the latest messages
     try:
         st.session_state.chat = [xata.query("comments",{"page": {"size": 2},
-        "sort": {"xata.createdAt": "asc"}
+        "sort": {"xata.createdAt": "desc"}
         })]
     except Exception as e:
         st.session_state.chat = []
